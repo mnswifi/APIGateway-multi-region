@@ -97,7 +97,7 @@ resource "aws_apigateway_deployment" "deployment" {
   depends_on  = [aws_apigateway_method.method_get]
 }
 
-resource "aws_apigateway_stage" "stage" {
+resource "aws_apigateway_stage" "tf_stage" {
   deployment_id = aws_apigateway_deployment.deployment.id
   rest_api_id   = aws_apigateway_rest_api.rest_api.id
   stage_name    = "development"

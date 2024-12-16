@@ -1,4 +1,5 @@
-variable "provider" {
-  description = "The deployment provider"
-  type        = string
+
+variable "lambda_role_id" {
+  description = "The lambda role"
+  type = string  
 }

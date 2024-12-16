@@ -1,7 +1,3 @@
-variable "provider" {
-  description = "The deployment provider"
-  type        = string
-}
 
 variable "region" {
   description = "The deployment region"

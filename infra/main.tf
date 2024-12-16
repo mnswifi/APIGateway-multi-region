@@ -31,7 +31,7 @@ module "iam_role" {
 
 module "networks" {
   source = "../module/networks"
-  provider = var.provider
+  provider = aws.primary
   vpc_cidr_block = var.vpc_cidr_block
   region = var.region
   protocol = var.protocol
