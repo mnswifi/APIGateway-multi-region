@@ -1,20 +1,25 @@
+variable "provider" {
+  description = "The deployment provider"
+  type        = string
+}
+
 variable "region" {
   description = "The deployment region"
-  type = string 
+  type        = string
 }
 
 variable "vpc_id" {
   description = "The vpc id"
-  type = string
+  type        = string
 }
 
 
 variable "dynamodb_table_arn" {
-    description = "Dynamodb arn"
-  type = string
+  description = "Dynamodb arn"
+  type        = string
 }
 
 variable "apigw_id" {
-    description = "REST APIGateway ID"
-    type = string  
+  description = "REST APIGateway ID"
+  type        = string
 }

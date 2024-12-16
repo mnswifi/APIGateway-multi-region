@@ -14,34 +14,34 @@ resource "aws_vpc" "tf_challenge_vpc" {
 }
 
 resource "aws_subnet" "private" {
-    vpc_id = aws_vpc.tf_challenge_vpc.id
-    cidr_block = ""
-  
+  vpc_id     = aws_vpc.tf_challenge_vpc.id
+  cidr_block = ""
+
 }
 
 
 resource "aws_security_group" "tf_sg" {
-    name = "Allow http traffic"
-    description = "Allow http inbound traffic and all outbound traffic"
-    vpc_id = aws_vpc.tf_challenge_vpc.id
+  name        = "Allow http traffic"
+  description = "Allow http inbound traffic and all outbound traffic"
+  vpc_id      = aws_vpc.tf_challenge_vpc.id
 
-    tags = {
-        name = "allow http"
-    } 
+  tags = {
+    name = "allow http"
+  }
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv4" {
-    security_group_id = aws_security_group.tf_sg.id
-    cidr_ipv4 = aws_vpc.tf_challenge_vpc.cidr_block
-    from_port = 80
-    ip_protocol = "http"
-    to_port = 80  
+  security_group_id = aws_security_group.tf_sg.id
+  cidr_ipv4         = aws_vpc.tf_challenge_vpc.cidr_block
+  from_port         = 80
+  ip_protocol       = "http"
+  to_port           = 80
 }
 
 resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
   security_group_id = aws_security_group.tf_sg.id
-  cidr_ipv4 = "0.0.0.0/0"
-  ip_protocol = "-1"
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
 }
 
 
