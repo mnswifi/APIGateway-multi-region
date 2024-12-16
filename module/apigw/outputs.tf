@@ -5,5 +5,5 @@ output "apigw_id" {
 
 
 output "api_endpoint" {
-  value = aws_api_gateway_stage.example_stage.invoke_url
+  value = aws_api_gateway_stage.tf_stage.invoke_url
 }
