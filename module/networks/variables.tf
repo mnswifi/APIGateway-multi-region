@@ -9,7 +9,17 @@ variable "region" {
 }
 
 
-variable "cidr_block" {
+variable "vpc_cidr_block" {
   description = "The cidr block"
   type        = string
+}
+
+variable "port" {
+  description = "The allowed port in security group"
+  type = string  
+}
+
+variable "protocol" {
+  description = "The allowed ip protocol"
+  type = string  
 }

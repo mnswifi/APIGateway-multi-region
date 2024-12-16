@@ -1,7 +1,7 @@
 #################### DYNAMODB ####################################
 
 # Primary DynamoDB Table
-resource "aws_dynamodb_table" "basic_dynamodb_table" {
+resource "aws_dynamodb_table" "tf_primary_db" {
   name         = "GameScores"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "customerId"
@@ -45,7 +45,7 @@ resource "aws_dynamodb_table" "basic_dynamodb_table" {
 }
 
 # Global Table Replica (Cross-region replication)
-resource "aws_dynamodb_table_replica" "example" {
+resource "aws_dynamodb_table_replica" "tf_secondary_db" {
   provider         = aws.replica_provider # Use an aliased provider for another region
   global_table_arn = aws_dynamodb_table.basic_dynamodb_table.arn
 

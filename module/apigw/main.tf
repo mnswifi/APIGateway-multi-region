@@ -23,12 +23,6 @@ resource "aws_apigateway_method" "method_get" {
   authorization = "NONE"
 }
 
-
-
-
-
-
-
 ################## Integration to DynamoDB ##################
 resource "aws_apigateway_integration" "integration_dynamodb" {
   rest_api_id             = aws_apigateway_rest_api.rest_api.id
