@@ -1,3 +1,6 @@
+data "aws_caller_identity" "current" {}
+
+
 # IAM Role for API Gateway to access DynamoDB
 resource "aws_iam_role" "api_gateway_role" {
   name               = "api-gateway-dynamodb-role"

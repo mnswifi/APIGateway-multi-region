@@ -1,8 +1,13 @@
-variable "region" {
+variable "region1" {
     description = "The region for the deployment"
     type = string  
 }
 
+
+variable "region2" {
+    description = "The region for the deployment"
+    type = string  
+}
 
 variable "vpc_cidr_block" {
   description = "The cidr block"

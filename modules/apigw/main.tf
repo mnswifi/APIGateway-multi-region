@@ -1,5 +1,8 @@
+data "aws_region" "current" {}
+
+
 # REST API Gateway
-resource "aws_apigateway_rest_api" "rest_api" {
+resource "aws_api_gateway_rest_api" "rest_api" {
   name        = "multi-region-api"
   description = "Multi-region DynamoDB access"
 
@@ -9,25 +12,25 @@ resource "aws_apigateway_rest_api" "rest_api" {
 }
 
 # Resource for API Gateway
-resource "aws_apigateway_resource" "tf_resource" {
-  rest_api_id = aws_apigateway_rest_api.rest_api.id
-  parent_id   = aws_apigateway_rest_api.rest_api.root_resource_id
+resource "aws_api_gateway_resource" "tf_resource" {
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  parent_id   = aws_api_gateway_rest_api.rest_api.root_resource_id
   path_part   = "registry"
 }
 
 # Integration with DynamoDB (Lambda Proxy)
-resource "aws_apigateway_method" "method_get" {
-  rest_api_id   = aws_apigateway_rest_api.rest_api.id
-  resource_id   = aws_apigateway_resource.resource.id
+resource "aws_api_gateway_method" "method_get" {
+  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
+  resource_id   = aws_api_gateway_resource.tf_resource.id
   http_method   = var.http_method
   authorization = "NONE"
 }
 
 ################## Integration to DynamoDB ##################
-resource "aws_apigateway_integration" "integration_dynamodb" {
-  rest_api_id             = aws_apigateway_rest_api.rest_api.id
-  resource_id             = aws_apigateway_resource.tf_resource.id
-  http_method             = aws_apigateway_method.method_get.http_method
+resource "aws_api_gateway_integration" "integration_dynamodb" {
+  rest_api_id             = aws_api_gateway_rest_api.rest_api.id
+  resource_id             = aws_api_gateway_resource.tf_resource.id
+  http_method             = aws_api_gateway_method.method_get.http_method
   type                    = "AWS"
   integration_http_method = "POST"
   uri                     = "arn:aws:apigateway:${data.aws_region.current.name}:dynamodb:action/Query"
@@ -37,10 +40,10 @@ resource "aws_apigateway_integration" "integration_dynamodb" {
     "application/json" = <<EOF
     {
       "TableName": "GameScores",
-      "KeyConditionExpression": "customerId = :customerId AND GameTitle = :gameTitle",
+      "KeyConditionExpression": "userId = :userId AND GameTitle = :gameTitle",
       "ExpressionAttributeValues": {
         ":customerId": {
-          "S": "$input.params('customerId')"
+          "S": "$input.params('userId')"
         },
         ":gameTitle": {
           "S": "$input.params('gameTitle')"
@@ -55,16 +58,16 @@ resource "aws_apigateway_integration" "integration_dynamodb" {
 ################## Integration Response #################################
 
 resource "aws_api_gateway_integration_response" "tf_response" {
-  http_method = aws_apigateway_method.method_get.http_method
-  resource_id = aws_apigateway_resource.tf_resource.id
-  rest_api_id = aws_apigateway_rest_api.rest_api.id
+  http_method = aws_api_gateway_method.method_get.http_method
+  resource_id = aws_api_gateway_resource.tf_resource.id
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
   status_code = "200"
 
   response_templates = {
     "application/json" = <<EOF
     #set($inputRoot = $input.path('$'))
     {
-      "customerId": "$inputRoot.Items[0].customerId.S",
+      "userId": "$inputRoot.Items[0].userId.S",
       "GameTitle": "$inputRoot.Items[0].GameTitle.S",
       "TopScore": "$inputRoot.Items[0].TopScore.N"
     }
@@ -75,9 +78,9 @@ resource "aws_api_gateway_integration_response" "tf_response" {
 ################## Method Response ################################
 
 resource "aws_api_gateway_method_response" "tf_response_method" {
-  http_method = aws_apigateway_method.method_get.http_method
-  resource_id = aws_apigateway_resource.tf_resource.id
-  rest_api_id = aws_apigateway_rest_api.rest_api.id
+  http_method = aws_api_gateway_method.method_get.http_method
+  resource_id = aws_api_gateway_resource.tf_resource.id
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
   status_code = "200"
 
   response_parameters = {
@@ -92,14 +95,14 @@ resource "aws_api_gateway_method_response" "tf_response_method" {
 
 
 # API Deployment
-resource "aws_apigateway_deployment" "deployment" {
-  rest_api_id = aws_apigateway_rest_api.rest_api.id
-  depends_on  = [aws_apigateway_method.method_get]
+resource "aws_api_gateway_deployment" "deployment" {
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  depends_on  = [aws_api_gateway_method.method_get]
 }
 
-resource "aws_apigateway_stage" "tf_stage" {
-  deployment_id = aws_apigateway_deployment.deployment.id
-  rest_api_id   = aws_apigateway_rest_api.rest_api.id
+resource "aws_api_gateway_stage" "tf_stage" {
+  deployment_id = aws_api_gateway_deployment.deployment.id
+  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
   stage_name    = "development"
 
   xray_tracing_enabled = true
