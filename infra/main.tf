@@ -5,22 +5,32 @@
 
 ################### API Gateway  ######################################
 
-# Create API Gateway
+module "apigw" {
+  source = "../module/apigw"
+  provider = aws.secondary
+  api_gateway_role_arn = ""
+  log_groups_arn = ""
+  region = ""
+  
+}
 
+module "iam_role" {
+  source = "../module/iam"
+  provider = aws.primary
+  region = var.region
+  dynamodb_table_arn = ""
+  apigw_id = ""
+  vpc_id = ""
+  
+}
 
-
-# Create Integration Request
-
-
-
-
-# Create Integration Response
-
-
-
-# IAM role for dynamodb query and policy
-
-
+module "networks" {
+  source = "../module/networks"
+  provider = var.provider
+  cidr_block = ""
+  region = ""
+  
+}
 
 
 ################################# DYNAMO DB #################################################

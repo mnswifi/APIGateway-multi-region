@@ -18,6 +18,8 @@ resource "aws_iam_role" "api_gateway_role" {
 }
 
 
+
+
 resource "aws_iam_policy" "dynamodb_policy" {
   name   = "dynamodb-access-policy"
   policy = <<EOF
@@ -45,7 +47,7 @@ resource "aws_iam_role_policy_attachment" "attach_dynamodb_policy" {
 # Resource Policy to Restrict API Gateway Access to VPC Endpoint
 resource "aws_api_gateway_rest_api_policy" "example_policy" {
   rest_api_id = var.apigw_id
-  policy      = <<EOF
+  policy = <<EOF
   {
     "Version": "2012-10-17",
     "Statement": [
