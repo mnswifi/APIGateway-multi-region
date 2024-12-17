@@ -1,5 +1,5 @@
 data "aws_caller_identity" "current" {}
-
+data "aws_region" "current" {}
 
 # IAM Role for API Gateway to access DynamoDB
 resource "aws_iam_role" "api_gateway_role" {
@@ -32,7 +32,7 @@ resource "aws_iam_policy" "dynamodb_policy" {
       {
         "Effect": "Allow",
         "Action": "dynamodb:Query",
-        "Resource": "${var.dynamodb_table_arn}"
+        "Resource": "arn:aws:dynamodb:*:${data.aws_caller_identity.current.account_id}:table/${var.dynamodb_table_name}"
       }
     ]
   }
@@ -58,7 +58,7 @@ resource "aws_api_gateway_rest_api_policy" "example_policy" {
         "Effect": "Allow",
         "Principal": "*",
         "Action": "execute-api:Invoke",
-        "Resource": "arn:aws:execute-api:${var.region}:${data.aws_caller_identity.current.account_id}:${var.apigw_id}/*",
+        "Resource": "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.apigw_id}/*",
         "Condition": {
           "StringEquals": {
             "aws:SourceVpc": "${var.vpc_id}"
@@ -69,3 +69,37 @@ resource "aws_api_gateway_rest_api_policy" "example_policy" {
   }
   EOF
 }
+
+
+
+resource "aws_cloudwatch_log_resource_policy" "tf_log_policy" {
+  policy_name = "tf_resource_policy"
+  policy_document = jsonencode(
+    {
+      "Version": "2012-10-17",
+      "Id":"CWLogsPolicy"
+      "Statement": [
+        {
+          "Effect":"Allow",
+          "Principal":{
+            "Service":[
+              "apigateway.amazonaws.com",
+              "delivery.logs.amazonaws.com"
+            ]
+          },
+          "Action" : [
+            "logs:CreateLogStream",
+            "logs:PutLogEvents"
+          ],
+          "Resource": var.log_group_arn,
+          "Condition":{
+            "ArnEquals": {
+              "aws:SourceArn" : var.apigw_arn
+            }
+          }
+        }
+      ]
+    }
+  )  
+}
+

@@ -10,11 +10,27 @@ terraform {
 
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.primary_region
   alias  = "primary"
+
+    default_tags {
+    tags = {
+      Environment = "dev-east"
+      Owner       = "terraform"
+      Project     = "terraform-challenge"
+    }
+  }
 }
 
 provider "aws" {
-  region = "us-west-2"
+  region = var.secondary_region
   alias  = "secondary"
+
+    default_tags {
+    tags = {
+      Environment = "dev-west"
+      Owner       = "terraform"
+      Project     = "terraform-challenge"
+    }
+  }
 }

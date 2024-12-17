@@ -20,3 +20,13 @@ variable "api_gateway_role_arn" {
   description = "The role arn for apigateway"
   type = string
 }
+
+
+
+variable "tags" {
+  type = map(string)
+  default = {
+    Environment = "dev"
+    ManagedBy   = "Terraform"
+  }
+}

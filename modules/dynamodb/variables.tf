@@ -58,11 +58,15 @@ variable "global_secondary_indexes" {
 variable "create_replica" {
   description = "Whether to create a replica for the DynamoDB table."
   type        = bool
-  default     = false
+  default     = true
 }
 
+
 variable "tags" {
-  description = "A map of tags to assign to resources."
-  type        = map(string)
-  default     = {}
+   description = "A map of tags to assign to resources."
+  type = map(string)
+  default = {
+    Environment = "dev"
+    ManagedBy   = "Terraform"
+  }
 }

@@ -1,12 +1,14 @@
-variable "region1" {
+variable "primary_region" {
     description = "The region for the deployment"
     type = string  
+    default = "us-east-1"
 }
 
 
-variable "region2" {
+variable "secondary_region" {
     description = "The region for the deployment"
-    type = string  
+    type = string 
+    default = "us-west-2" 
 }
 
 variable "vpc_cidr_block" {
@@ -29,4 +31,15 @@ variable "protocol" {
 variable "http_method" {
   description = "The Apigateway method"
   type = string
+}
+
+variable "environment" {
+  description = "The deployment environment"
+  type = string  
+}
+
+
+variable "dynamodb_table_name" {
+  description = "dynamodb table name"
+  type = string  
 }

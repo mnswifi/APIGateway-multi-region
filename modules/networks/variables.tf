@@ -18,3 +18,11 @@ variable "protocol" {
   description = "The allowed ip protocol"
   type = string  
 }
+
+variable "tags" {
+  type = map(string)
+  default = {
+    Environment = "dev"
+    ManagedBy   = "Terraform"
+  }
+}

@@ -1,6 +1,6 @@
-region1 = "us-east-1"
+primary_region = "us-east-1"
 
-region2 = "us-west-2"
+secosecondary_region = "us-west-2"
 
 
 vpc_cidr_block = "10.0.0.0/16"
@@ -11,3 +11,5 @@ protocol = "http"
 
 
 http_method = "GET"
+
+environment = "dev"

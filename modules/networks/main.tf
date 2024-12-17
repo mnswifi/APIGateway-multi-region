@@ -8,7 +8,6 @@
 # }
 
 
-
 resource "aws_vpc" "tf_challenge_vpc" {
   cidr_block = var.vpc_cidr_block
 }
