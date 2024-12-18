@@ -11,12 +11,12 @@ variable "vpc_cidr_block" {
 
 variable "port" {
   description = "The allowed port in security group"
-  type = string  
+  type        = string
 }
 
 variable "protocol" {
   description = "The allowed ip protocol"
-  type = string  
+  type        = string
 }
 
 variable "tags" {

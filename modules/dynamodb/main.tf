@@ -16,7 +16,7 @@ resource "aws_dynamodb_table" "tf_primary_db" {
   name         = "GameScores"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "userId"
-  range_key    = "GameTitle"
+  # range_key    = "gameTitle"
 
   # Define only the required attributes
   attribute {
@@ -25,31 +25,30 @@ resource "aws_dynamodb_table" "tf_primary_db" {
   }
 
   attribute {
-    name = "GameTitle"
+    name = "gameTitle"
     type = "S"
   }
 
   attribute {
     name = "TopScore"
-    type = "N" 
+    type = "N"
   }
 
   # Time-to-live (TTL) configuration
   ttl {
-    attribute_name = "TimeToExist" 
+    attribute_name = "TimeToExist"
     enabled        = true
   }
 
-  stream_enabled = true
+  stream_enabled   = true
   stream_view_type = "NEW_AND_OLD_IMAGES"
 
-  # Global Secondary Index (GSI)
   global_secondary_index {
-    name               = "GameTitleIndex"
-    hash_key           = "GameTitle"
-    range_key          = "TopScore"
-    projection_type    = "INCLUDE" 
-    non_key_attributes = ["customerId"] 
+    name            = "GameTitleIndex"
+    hash_key        = "gameTitle"
+    range_key       = "TopScore"
+    projection_type = "ALL"
+    # non_key_attributes = ["customerId"] 
   }
 
   tags = {
@@ -60,8 +59,8 @@ resource "aws_dynamodb_table" "tf_primary_db" {
 
 # Global Table Replica (Cross-region replication)
 resource "aws_dynamodb_table_replica" "tf_secondary_db" {
-  count = var.create_replica ? 1: 0
-  provider         = aws.secondary 
+  count            = var.create_replica ? 1 : 0
+  provider         = aws.secondary
   global_table_arn = aws_dynamodb_table.tf_primary_db.arn
 
   tags = {

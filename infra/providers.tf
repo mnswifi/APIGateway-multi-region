@@ -13,7 +13,7 @@ provider "aws" {
   region = var.primary_region
   alias  = "primary"
 
-    default_tags {
+  default_tags {
     tags = {
       Environment = "dev-east"
       Owner       = "terraform"
@@ -26,7 +26,7 @@ provider "aws" {
   region = var.secondary_region
   alias  = "secondary"
 
-    default_tags {
+  default_tags {
     tags = {
       Environment = "dev-west"
       Owner       = "terraform"

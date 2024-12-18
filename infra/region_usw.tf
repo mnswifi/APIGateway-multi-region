@@ -5,11 +5,11 @@ module "apigw_usw" {
   providers = {
     aws = aws.secondary
   }
-  vpc_id = module.networks_usw.vpc_id
-  log_groups_arn = module.cloudwatch_usw.log_groups_arn
-  region = var.secondary_region
-  http_method = var.regions[var.secondary_region].http_method
-  api_gateway_role_arn = module.iam_role.api_gateway_role_arn  
+  vpc_id               = module.networks_usw.vpc_id
+  log_groups_arn       = module.cloudwatch_usw.log_groups_arn
+  region               = var.secondary_region
+  http_method          = var.regions[var.secondary_region].http_method
+  api_gateway_role_arn = module.iam_role.api_gateway_role_arn
 }
 
 
@@ -22,9 +22,9 @@ module "networks_usw" {
     aws = aws.secondary
   }
   vpc_cidr_block = var.regions[var.secondary_region].vpc_cidr_block
-  region = var.secondary_region
-  protocol = var.regions[var.secondary_region].protocol
-  port = var.regions[var.secondary_region].port
+  region         = var.secondary_region
+  protocol       = var.regions[var.secondary_region].protocol
+  port           = var.regions[var.secondary_region].port
 }
 
 ################################ CLOUDWATCH LOG GROUPS #################################################
@@ -34,6 +34,7 @@ module "cloudwatch_usw" {
   providers = {
     aws = aws.secondary
   }
+  log_name = var.regions[var.secondary_region].log_name
 }
 
 

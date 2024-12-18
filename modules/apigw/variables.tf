@@ -12,12 +12,12 @@ variable "log_groups_arn" {
 
 variable "http_method" {
   description = "The Apigateway method"
-  type = string
+  type        = string
 }
 
-variable "api_gateway_role_arn" {  
+variable "api_gateway_role_arn" {
   description = "The role arn for apigateway"
-  type = string
+  type        = string
 }
 
 variable "vpc_id" {
@@ -25,13 +25,3 @@ variable "vpc_id" {
   type        = string
 }
 
-
-
-
-variable "tags" {
-  type = map(string)
-  default = {
-    Environment = "dev"
-    ManagedBy   = "Terraform"
-  }
-}

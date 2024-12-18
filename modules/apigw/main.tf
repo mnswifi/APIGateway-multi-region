@@ -42,7 +42,7 @@ resource "aws_api_gateway_integration" "integration_dynamodb" {
     {
       "TableName": "GameScores",
       "KeyConditionExpression": "userId = :userId",
-      "ProjectionExpression": "userId, gameTitle, TopScore"
+      "ProjectionExpression": "userId, gameTitle, TopScore",
       "ExpressionAttributeValues": {
         ":userId": {
           "S": "$input.params('userId')"
@@ -51,13 +51,14 @@ resource "aws_api_gateway_integration" "integration_dynamodb" {
     }
     EOF
   }
+  passthrough_behavior = "WHEN_NO_MATCH"
 }
 
 
 ################## Integration Response #################################
 
 resource "aws_api_gateway_integration_response" "tf_response" {
-  depends_on = [ aws_api_gateway_integration.integration_dynamodb ]
+  depends_on  = [aws_api_gateway_integration.integration_dynamodb]
   http_method = aws_api_gateway_method.method_get.http_method
   resource_id = aws_api_gateway_resource.tf_resource.id
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
@@ -101,7 +102,7 @@ resource "aws_api_gateway_deployment" "deployment" {
 }
 
 resource "aws_api_gateway_stage" "tf_stage" {
-  depends_on = [aws_api_gateway_account.account_settings]
+  depends_on    = [aws_api_gateway_account.account_settings]
   deployment_id = aws_api_gateway_deployment.deployment.id
   rest_api_id   = aws_api_gateway_rest_api.rest_api.id
   stage_name    = "development"
@@ -130,7 +131,7 @@ resource "aws_api_gateway_stage" "tf_stage" {
 # Resource Policy to Restrict API Gateway Access to VPC Endpoint
 resource "aws_api_gateway_rest_api_policy" "example_policy" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
-  policy = <<EOF
+  policy      = <<EOF
   {
     "Version": "2012-10-17",
     "Statement": [
@@ -152,5 +153,5 @@ resource "aws_api_gateway_rest_api_policy" "example_policy" {
 
 resource "aws_api_gateway_account" "account_settings" {
   cloudwatch_role_arn = var.api_gateway_role_arn
-  reset_on_delete = true
+  reset_on_delete     = true
 }

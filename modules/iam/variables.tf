@@ -11,7 +11,7 @@ variable "dynamodb_table_arn" {
 
 variable "dynamodb_table_name" {
   description = "dynamodb table name"
-  type = string  
+  type        = string
 }
 
 # variable "apigw_ids" {
@@ -30,11 +30,11 @@ variable "tags" {
 
 variable "log_group_arns" {
   description = "The Log group ARN"
-  type = map(string)  
+  type        = map(string)
 }
 
 variable "apigw_arns" {
   description = "The APIgw ARN"
-  type = map(string)  
+  type        = map(string)
 }
 

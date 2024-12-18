@@ -1,6 +1,6 @@
 
 
-primary_region = "us-east-1"
+primary_region   = "us-east-1"
 secondary_region = "us-west-2"
 
 
@@ -11,6 +11,7 @@ regions = {
     protocol       = "tcp"
     http_method    = "GET"
     environment    = "dev"
+    log_name       = "east-log"
   }
   "us-west-2" = {
     vpc_cidr_block = "10.1.0.0/16"
@@ -18,5 +19,6 @@ regions = {
     protocol       = "tcp"
     http_method    = "GET"
     environment    = "dev"
+    log_name       = "west-log"
   }
 }

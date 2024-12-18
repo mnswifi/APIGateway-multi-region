@@ -22,7 +22,7 @@ module "iam_role" {
     usw = module.apigw_usw.apigw_arn
   }
 
-  dynamodb_table_arn = module.dynamodb_use.dynamodb_arn 
+  dynamodb_table_arn  = module.dynamodb_use.dynamodb_arn
   dynamodb_table_name = module.dynamodb_use.table_name
 }
 

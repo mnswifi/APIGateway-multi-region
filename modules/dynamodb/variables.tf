@@ -63,8 +63,8 @@ variable "create_replica" {
 
 
 variable "tags" {
-   description = "A map of tags to assign to resources."
-  type = map(string)
+  description = "A map of tags to assign to resources."
+  type        = map(string)
   default = {
     Environment = "dev"
     ManagedBy   = "Terraform"

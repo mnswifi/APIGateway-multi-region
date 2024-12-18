@@ -1,14 +1,14 @@
 variable "primary_region" {
-    description = "The region for the deployment"
-    type = string  
-    default = "us-east-1"
+  description = "The region for the deployment"
+  type        = string
+  default     = "us-east-1"
 }
 
 
 variable "secondary_region" {
-    description = "The region for the deployment"
-    type = string 
-    default = "us-west-2" 
+  description = "The region for the deployment"
+  type        = string
+  default     = "us-west-2"
 }
 
 
@@ -20,5 +20,6 @@ variable "regions" {
     protocol       = string
     http_method    = string
     environment    = string
+    log_name       = string
   }))
 }

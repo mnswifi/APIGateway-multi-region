@@ -5,11 +5,11 @@ module "apigw_use" {
   providers = {
     aws = aws.primary
   }
-  vpc_id = module.networks_use.vpc_id
-  log_groups_arn = module.cloudwatch_use.log_groups_arn
-  region = var.primary_region
-  http_method = var.regions[var.primary_region].http_method
-  api_gateway_role_arn = module.iam_role.api_gateway_role_arn  
+  vpc_id               = module.networks_use.vpc_id
+  log_groups_arn       = module.cloudwatch_use.log_groups_arn
+  region               = var.primary_region
+  http_method          = var.regions[var.primary_region].http_method
+  api_gateway_role_arn = module.iam_role.api_gateway_role_arn
 }
 
 
@@ -22,26 +22,26 @@ module "networks_use" {
     aws = aws.primary
   }
   vpc_cidr_block = var.regions[var.primary_region].vpc_cidr_block
-  region = var.primary_region
-  protocol = var.regions[var.primary_region].protocol
-  port = var.regions[var.primary_region].port
+  region         = var.primary_region
+  protocol       = var.regions[var.primary_region].protocol
+  port           = var.regions[var.primary_region].port
 }
 
 
 ################################# DYNAMO DB #################################################
 
 module "dynamodb_use" {
-  source              = "../modules/dynamodb"
-  providers           = { aws = aws.primary }
-  table_name          = "GameScores"
-  billing_mode        = "PAY_PER_REQUEST"
-  hash_key            = "userId"
-  range_key           = "GameTitle"
-  hash_key_type       = "S"
-  range_key_type      = "S"
-  ttl_attribute_name  = "TimeToExist"
-  ttl_enabled         = true
-  create_replica      = true
+  source             = "../modules/dynamodb"
+  providers          = { aws = aws.primary }
+  table_name         = "GameScores"
+  billing_mode       = "PAY_PER_REQUEST"
+  hash_key           = "userId"
+  range_key          = "GameTitle"
+  hash_key_type      = "S"
+  range_key_type     = "S"
+  ttl_attribute_name = "TimeToExist"
+  ttl_enabled        = true
+  create_replica     = true
 
   global_secondary_indexes = [
     {
@@ -63,6 +63,7 @@ module "cloudwatch_use" {
   providers = {
     aws = aws.primary
   }
+  log_name = var.regions[var.primary_region].log_name
 }
 
 

@@ -4,7 +4,7 @@ output "dynamodb_arn" {
 
 
 output "replica_dynamodb_arn" {
-  value = aws_dynamodb_table_replica.tf_secondary_db[0].arn  
+  value = aws_dynamodb_table_replica.tf_secondary_db[0].arn
 }
 
 
