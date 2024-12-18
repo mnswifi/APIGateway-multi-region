@@ -15,11 +15,16 @@ variable "http_method" {
   type = string
 }
 
-variable "api_gateway_role_arn" {
-  
+variable "api_gateway_role_arn" {  
   description = "The role arn for apigateway"
   type = string
 }
+
+variable "vpc_id" {
+  description = "The vpc id"
+  type        = string
+}
+
 
 
 

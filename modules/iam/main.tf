@@ -47,29 +47,6 @@ resource "aws_iam_role_policy_attachment" "attach_dynamodb_policy" {
 }
 
 
-# Resource Policy to Restrict API Gateway Access to VPC Endpoint
-resource "aws_api_gateway_rest_api_policy" "example_policy" {
-  rest_api_id = var.apigw_id
-  policy = <<EOF
-  {
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Effect": "Allow",
-        "Principal": "*",
-        "Action": "execute-api:Invoke",
-        "Resource": "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.apigw_id}/*",
-        "Condition": {
-          "StringEquals": {
-            "aws:SourceVpc": "${var.vpc_id}"
-          }
-        }
-      }
-    ]
-  }
-  EOF
-}
-
 
 
 resource "aws_cloudwatch_log_resource_policy" "tf_log_policy" {
@@ -91,10 +68,10 @@ resource "aws_cloudwatch_log_resource_policy" "tf_log_policy" {
             "logs:CreateLogStream",
             "logs:PutLogEvents"
           ],
-          "Resource": var.log_group_arn,
+          "Resource": values(var.log_group_arns),
           "Condition":{
             "ArnEquals": {
-              "aws:SourceArn" : var.apigw_arn
+              "aws:SourceArn" : values(var.apigw_arns)
             }
           }
         }

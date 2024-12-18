@@ -1,6 +1,6 @@
-variable "vpc_id" {
+variable "vpc_ids" {
   description = "The vpc id"
-  type        = string
+  type        = map(string)
 }
 
 
@@ -14,10 +14,10 @@ variable "dynamodb_table_name" {
   type = string  
 }
 
-variable "apigw_id" {
-  description = "REST APIGateway ID"
-  type        = string
-}
+# variable "apigw_ids" {
+#   description = "REST APIGateway ID"
+#   type        = map(string)
+# }
 
 
 variable "tags" {
@@ -28,13 +28,13 @@ variable "tags" {
   }
 }
 
-variable "log_group_arn" {
+variable "log_group_arns" {
   description = "The Log group ARN"
-  type = string  
+  type = map(string)  
 }
 
-variable "apigw_arn" {
+variable "apigw_arns" {
   description = "The APIgw ARN"
-  type = string  
+  type = map(string)  
 }
 

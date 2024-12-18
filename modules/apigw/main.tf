@@ -1,4 +1,5 @@
 data "aws_region" "current" {}
+data "aws_caller_identity" "current" {}
 
 
 # REST API Gateway
@@ -125,3 +126,26 @@ resource "aws_api_gateway_stage" "tf_stage" {
   }
 }
 
+
+# Resource Policy to Restrict API Gateway Access to VPC Endpoint
+resource "aws_api_gateway_rest_api_policy" "example_policy" {
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  policy = <<EOF
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": "*",
+        "Action": "execute-api:Invoke",
+        "Resource": "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.rest_api.id}/*",
+        "Condition": {
+          "StringEquals": {
+            "aws:SourceVpc": "${var.vpc_id}"
+          }
+        }
+      }
+    ]
+  }
+  EOF
+}
