@@ -41,13 +41,11 @@ resource "aws_api_gateway_integration" "integration_dynamodb" {
     "application/json" = <<EOF
     {
       "TableName": "GameScores",
-      "KeyConditionExpression": "userId = :userId AND GameTitle = :gameTitle",
+      "KeyConditionExpression": "userId = :userId",
+      "ProjectionExpression": "userId, gameTitle, TopScore"
       "ExpressionAttributeValues": {
-        ":customerId": {
+        ":userId": {
           "S": "$input.params('userId')"
-        },
-        ":gameTitle": {
-          "S": "$input.params('gameTitle')"
         }
       }
     }
@@ -70,7 +68,7 @@ resource "aws_api_gateway_integration_response" "tf_response" {
     #set($inputRoot = $input.path('$'))
     {
       "userId": "$inputRoot.Items[0].userId.S",
-      "GameTitle": "$inputRoot.Items[0].GameTitle.S",
+      "gameTitle": "$inputRoot.Items[0].gameTitle.S",
       "TopScore": "$inputRoot.Items[0].TopScore.N"
     }
     EOF
@@ -154,4 +152,5 @@ resource "aws_api_gateway_rest_api_policy" "example_policy" {
 
 resource "aws_api_gateway_account" "account_settings" {
   cloudwatch_role_arn = var.api_gateway_role_arn
+  reset_on_delete = true
 }

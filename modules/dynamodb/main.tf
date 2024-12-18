@@ -15,12 +15,12 @@ provider "aws" {
 resource "aws_dynamodb_table" "tf_primary_db" {
   name         = "GameScores"
   billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "customerId"
+  hash_key     = "userId"
   range_key    = "GameTitle"
 
   # Define only the required attributes
   attribute {
-    name = "customerId"
+    name = "userId"
     type = "S"
   }
 
@@ -40,13 +40,16 @@ resource "aws_dynamodb_table" "tf_primary_db" {
     enabled        = true
   }
 
+  stream_enabled = true
+  stream_view_type = "NEW_AND_OLD_IMAGES"
+
   # Global Secondary Index (GSI)
   global_secondary_index {
     name               = "GameTitleIndex"
     hash_key           = "GameTitle"
     range_key          = "TopScore"
     projection_type    = "INCLUDE" 
-    non_key_attributes = ["userId"] 
+    non_key_attributes = ["customerId"] 
   }
 
   tags = {
