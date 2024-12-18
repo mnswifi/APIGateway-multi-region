@@ -8,14 +8,14 @@ regions = {
   "us-east-1" = {
     vpc_cidr_block = "10.0.0.0/16"
     port           = 80
-    protocol       = "http"
+    protocol       = "tcp"
     http_method    = "GET"
     environment    = "dev"
   }
   "us-west-2" = {
     vpc_cidr_block = "10.1.0.0/16"
     port           = 80
-    protocol       = "http"
+    protocol       = "tcp"
     http_method    = "GET"
     environment    = "dev"
   }

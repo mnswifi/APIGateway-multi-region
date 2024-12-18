@@ -16,7 +16,7 @@ resource "aws_api_gateway_rest_api" "rest_api" {
 resource "aws_api_gateway_resource" "tf_resource" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
   parent_id   = aws_api_gateway_rest_api.rest_api.root_resource_id
-  path_part   = "registry"
+  path_part   = "records"
 }
 
 # Integration with DynamoDB (Lambda Proxy)
@@ -59,6 +59,7 @@ resource "aws_api_gateway_integration" "integration_dynamodb" {
 ################## Integration Response #################################
 
 resource "aws_api_gateway_integration_response" "tf_response" {
+  depends_on = [ aws_api_gateway_integration.integration_dynamodb ]
   http_method = aws_api_gateway_method.method_get.http_method
   resource_id = aws_api_gateway_resource.tf_resource.id
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
@@ -98,10 +99,11 @@ resource "aws_api_gateway_method_response" "tf_response_method" {
 # API Deployment
 resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
-  depends_on  = [aws_api_gateway_method.method_get]
+  depends_on  = [aws_api_gateway_method.method_get, aws_api_gateway_rest_api_policy.example_policy]
 }
 
 resource "aws_api_gateway_stage" "tf_stage" {
+  depends_on = [aws_api_gateway_account.account_settings]
   deployment_id = aws_api_gateway_deployment.deployment.id
   rest_api_id   = aws_api_gateway_rest_api.rest_api.id
   stage_name    = "development"
@@ -148,4 +150,8 @@ resource "aws_api_gateway_rest_api_policy" "example_policy" {
     ]
   }
   EOF
+}
+
+resource "aws_api_gateway_account" "account_settings" {
+  cloudwatch_role_arn = var.api_gateway_role_arn
 }
