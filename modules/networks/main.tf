@@ -52,11 +52,12 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
 
 # Create VPC Endpoint for API Gateway
 resource "aws_vpc_endpoint" "apigw_vpce" {
-  depends_on         = [aws_subnet.tf_private_subnet]
-  vpc_id             = aws_vpc.tf_challenge_vpc.id
-  service_name       = "com.amazonaws.${data.aws_region.current.name}.execute-api"
-  vpc_endpoint_type  = "Interface"
-  security_group_ids = [aws_security_group.tf_sg.id]
-  subnet_ids         = [aws_subnet.tf_private_subnet.id]
+  depends_on          = [aws_subnet.tf_private_subnet]
+  vpc_id              = aws_vpc.tf_challenge_vpc.id
+  service_name        = "com.amazonaws.${data.aws_region.current.name}.execute-api"
+  vpc_endpoint_type   = "Interface"
+  security_group_ids  = [aws_security_group.tf_sg.id]
+  subnet_ids          = [aws_subnet.tf_private_subnet.id]
+  private_dns_enabled = true
 }
 
