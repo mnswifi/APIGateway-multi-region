@@ -12,6 +12,7 @@ resource "aws_api_gateway_rest_api" "rest_api" {
   }
 }
 
+
 # Resource for API Gateway
 resource "aws_api_gateway_resource" "tf_resource" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
@@ -105,7 +106,7 @@ resource "aws_api_gateway_stage" "tf_stage" {
   depends_on    = [aws_api_gateway_account.account_settings]
   deployment_id = aws_api_gateway_deployment.deployment.id
   rest_api_id   = aws_api_gateway_rest_api.rest_api.id
-  stage_name    = "development"
+  stage_name    = "dev"
 
   xray_tracing_enabled = true
 

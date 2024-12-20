@@ -16,7 +16,8 @@ variable "regions" {
   description = "Mapping of region-specific configurations"
   type = map(object({
     vpc_cidr_block = string
-    port           = number
+    port_http      = number
+    port_https     = number
     protocol       = string
     http_method    = string
     environment    = string

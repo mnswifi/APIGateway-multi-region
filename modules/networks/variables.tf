@@ -9,8 +9,13 @@ variable "vpc_cidr_block" {
   type        = string
 }
 
-variable "port" {
-  description = "The allowed port in security group"
+variable "port_http" {
+  description = "The allowed http port in security group"
+  type        = string
+}
+
+variable "port_https" {
+  description = "The allowed Https port in security group"
   type        = string
 }
 

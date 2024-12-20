@@ -12,3 +12,8 @@ output "apigw_arn" {
   value = aws_api_gateway_rest_api.rest_api.arn
 }
 
+output "path_part" {
+  value = aws_api_gateway_resource.tf_resource.path_part
+}
+
+

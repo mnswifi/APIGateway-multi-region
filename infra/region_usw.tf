@@ -24,7 +24,8 @@ module "networks_usw" {
   vpc_cidr_block = var.regions[var.secondary_region].vpc_cidr_block
   region         = var.secondary_region
   protocol       = var.regions[var.secondary_region].protocol
-  port           = var.regions[var.secondary_region].port
+  port_http      = var.regions[var.secondary_region].port_http
+  port_https     = var.regions[var.secondary_region].port_https
 }
 
 ################################ CLOUDWATCH LOG GROUPS #################################################
@@ -38,7 +39,20 @@ module "cloudwatch_usw" {
 }
 
 
+############################# Lambda Curl Test ##################################'
 
+module "Lambda_test_usw" {
+  depends_on = [module.apigw_usw]
+  providers = {
+    aws = aws.secondary
+  }
+  source             = "../modules/lambda"
+  lambda_curl_arn    = module.iam_role.lambda_curl_arn
+  apigw_invoke_curl  = module.apigw_usw.api_endpoint
+  subnet_ids         = module.networks_usw.subnet_id
+  security_group_ids = module.networks_usw.security_group_id
+  apigw_path_part    = module.apigw_usw.path_part
+}
 
 
 

@@ -24,7 +24,8 @@ module "networks_use" {
   vpc_cidr_block = var.regions[var.primary_region].vpc_cidr_block
   region         = var.primary_region
   protocol       = var.regions[var.primary_region].protocol
-  port           = var.regions[var.primary_region].port
+  port_http      = var.regions[var.primary_region].port_http
+  port_https     = var.regions[var.primary_region].port_https
 }
 
 
@@ -67,7 +68,20 @@ module "cloudwatch_use" {
 }
 
 
+############################# Lambda Curl Test ##################################'
 
+module "Lambda_test_use" {
+  depends_on = [module.networks_use]
+  providers = {
+    aws = aws.primary
+  }
+  source             = "../modules/lambda"
+  lambda_curl_arn    = module.iam_role.lambda_curl_arn
+  apigw_invoke_curl  = module.apigw_use.api_endpoint
+  subnet_ids         = module.networks_use.subnet_id
+  security_group_ids = module.networks_use.security_group_id
+  apigw_path_part    = module.apigw_use.path_part
+}
 
 
 
