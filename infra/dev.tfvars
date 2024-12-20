@@ -11,7 +11,6 @@ regions = {
     http_method    = "GET"
     environment    = "dev"
     log_name       = "east-log"
-    billing_mode   = "PAY_PER_REQUEST"
     table_name     = "GameScores"
     hash_key       = "userId"
     region         = "east"
@@ -25,6 +24,8 @@ regions = {
     http_method    = "GET"
     environment    = "dev"
     log_name       = "west-log"
+    table_name     = "GameScores"
+    hash_key       = "userId"
     region         = "west"
   }
 }

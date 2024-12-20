@@ -23,9 +23,8 @@ variable "regions" {
     http_method    = string
     environment    = string
     log_name       = string
-    billing_mode   = string
+    region         = string
     table_name     = string
     hash_key       = string
-    region         = string
   }))
 }

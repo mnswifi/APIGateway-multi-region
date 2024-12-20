@@ -33,8 +33,7 @@ module "dynamodb_use" {
   source         = "../modules/dynamodb"
   providers      = { aws = aws.primary }
   table_name     = var.regions[var.primary_region].table_name
-  billing_mode   = var.regions[var.primary_region].billing_mode
-  hash_key       = var.regions[var.primary_region].userId
+  hash_key       = var.regions[var.primary_region].hash_key
   create_replica = true
 }
 
