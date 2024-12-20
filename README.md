@@ -1,5 +1,5 @@
 
 
-# Project design
+# Project Design
 
-![alt text](image.png)
+![alt text](Multi-region-apigw.png)
