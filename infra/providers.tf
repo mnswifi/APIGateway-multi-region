@@ -1,3 +1,4 @@
+# Required versions and providers
 terraform {
   required_version = "~>1.10.2"
   required_providers {
@@ -8,7 +9,7 @@ terraform {
   }
 }
 
-
+# Primary Region
 provider "aws" {
   region = var.primary_region
   alias  = "primary"
@@ -22,6 +23,7 @@ provider "aws" {
   }
 }
 
+# Secondary Region
 provider "aws" {
   region = var.secondary_region
   alias  = "secondary"

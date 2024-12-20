@@ -1,3 +1,4 @@
+# Required versions and providers
 terraform {
   required_providers {
     aws = {

@@ -1,22 +1,12 @@
-
-provider "aws" {
-  region = "us-east-1"
-  alias  = "primary"
-}
-
-provider "aws" {
-  region = "us-west-2"
-  alias  = "secondary"
-}
-
-##################### DYNAMODB ####################################
+############################## DYNAMODB ####################################
 
 # Primary DynamoDB Table
 resource "aws_dynamodb_table" "tf_primary_db" {
-  name         = "GameScores"
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "userId"
-  # range_key    = "gameTitle"
+  name             = "GameScores"
+  billing_mode     = var.billing_mode
+  hash_key         = "userId"
+  stream_enabled   = true
+  stream_view_type = "NEW_AND_OLD_IMAGES"
 
   # Define only the required attributes
   attribute {
@@ -40,15 +30,11 @@ resource "aws_dynamodb_table" "tf_primary_db" {
     enabled        = true
   }
 
-  stream_enabled   = true
-  stream_view_type = "NEW_AND_OLD_IMAGES"
-
   global_secondary_index {
     name            = "GameTitleIndex"
     hash_key        = "gameTitle"
     range_key       = "TopScore"
     projection_type = "ALL"
-    # non_key_attributes = ["customerId"] 
   }
 
   tags = {

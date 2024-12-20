@@ -1,8 +1,5 @@
-data "aws_region" "current" {}
-data "aws_caller_identity" "current" {}
-
-
-# REST API Gateway
+################################# APIGATEWAY ##########################################
+# Resource Rest API Gateway
 resource "aws_api_gateway_rest_api" "rest_api" {
   name        = "multi-region-api"
   description = "Multi-region DynamoDB access"
@@ -12,15 +9,14 @@ resource "aws_api_gateway_rest_api" "rest_api" {
   }
 }
 
-
-# Resource for API Gateway
+# Resource API Gateway path
 resource "aws_api_gateway_resource" "tf_resource" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
   parent_id   = aws_api_gateway_rest_api.rest_api.root_resource_id
   path_part   = "records"
 }
 
-# Integration with DynamoDB (Lambda Proxy)
+# Resource API Gateway method
 resource "aws_api_gateway_method" "method_get" {
   rest_api_id   = aws_api_gateway_rest_api.rest_api.id
   resource_id   = aws_api_gateway_resource.tf_resource.id
@@ -28,7 +24,8 @@ resource "aws_api_gateway_method" "method_get" {
   authorization = "NONE"
 }
 
-################## Integration to DynamoDB ##################
+############################# Integration to DynamoDB ############################
+# Resource API Gateway Dynamodb Integration
 resource "aws_api_gateway_integration" "integration_dynamodb" {
   rest_api_id             = aws_api_gateway_rest_api.rest_api.id
   resource_id             = aws_api_gateway_resource.tf_resource.id
@@ -56,8 +53,8 @@ resource "aws_api_gateway_integration" "integration_dynamodb" {
 }
 
 
-################## Integration Response #################################
-
+############################### Integration Response #################################
+# Resource API Gateway Integration response
 resource "aws_api_gateway_integration_response" "tf_response" {
   depends_on  = [aws_api_gateway_integration.integration_dynamodb]
   http_method = aws_api_gateway_method.method_get.http_method
@@ -77,8 +74,8 @@ resource "aws_api_gateway_integration_response" "tf_response" {
   }
 }
 
-################## Method Response ################################
-
+############################ Method Response ################################
+# Resource API Gateway method response
 resource "aws_api_gateway_method_response" "tf_response_method" {
   http_method = aws_api_gateway_method.method_get.http_method
   resource_id = aws_api_gateway_resource.tf_resource.id
@@ -96,12 +93,13 @@ resource "aws_api_gateway_method_response" "tf_response_method" {
 
 
 
-# API Deployment
+# Resource API Gateway Deployment
 resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
   depends_on  = [aws_api_gateway_method.method_get, aws_api_gateway_rest_api_policy.example_policy]
 }
 
+# Resource API Gateway Stage
 resource "aws_api_gateway_stage" "tf_stage" {
   depends_on    = [aws_api_gateway_account.account_settings]
   deployment_id = aws_api_gateway_deployment.deployment.id
@@ -129,7 +127,7 @@ resource "aws_api_gateway_stage" "tf_stage" {
 }
 
 
-# Resource Policy to Restrict API Gateway Access to VPC Endpoint
+# Resource Policy to Restrict API Gateway Access to VPC
 resource "aws_api_gateway_rest_api_policy" "example_policy" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
   policy      = <<EOF
@@ -152,6 +150,7 @@ resource "aws_api_gateway_rest_api_policy" "example_policy" {
   EOF
 }
 
+# Resource API Gateway account settings
 resource "aws_api_gateway_account" "account_settings" {
   cloudwatch_role_arn = var.api_gateway_role_arn
   reset_on_delete     = true

@@ -1,25 +1,22 @@
+# VPC ids
 variable "vpc_ids" {
-  description = "The vpc id"
+  description = "VPC ID"
   type        = map(string)
 }
 
-
+# DynamoDB table arn
 variable "dynamodb_table_arn" {
   description = "Dynamodb arn"
   type        = string
 }
 
+# Dynamodb Table name
 variable "dynamodb_table_name" {
   description = "dynamodb table name"
   type        = string
 }
 
-# variable "apigw_ids" {
-#   description = "REST APIGateway ID"
-#   type        = map(string)
-# }
-
-
+# Default tag
 variable "tags" {
   type = map(string)
   default = {
@@ -28,13 +25,15 @@ variable "tags" {
   }
 }
 
+# Cloudwatch log group arn
 variable "log_group_arns" {
-  description = "The Log group ARN"
+  description = "Cloudwatch Log group ARN"
   type        = map(string)
 }
 
+# API Gateway arn
 variable "apigw_arns" {
-  description = "The APIgw ARN"
+  description = "API Gateway ARN"
   type        = map(string)
 }
 

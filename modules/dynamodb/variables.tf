@@ -1,67 +1,30 @@
+# Dynamodb table name
 variable "table_name" {
-  description = "The name of the DynamoDB table."
+  description = "DynamoDB table name"
   type        = string
 }
 
+# Dynamodb billing mode
 variable "billing_mode" {
   description = "The billing mode for the DynamoDB table (e.g., PAY_PER_REQUEST or PROVISIONED)."
   type        = string
   default     = "PAY_PER_REQUEST"
 }
 
+# Dynamodb Hash Key
 variable "hash_key" {
   description = "The primary hash key for the table."
   type        = string
 }
 
-variable "range_key" {
-  description = "The primary range key for the table."
-  type        = string
-}
-
-variable "hash_key_type" {
-  description = "The type of the hash key (e.g., S or N)."
-  type        = string
-  default     = "S"
-}
-
-variable "range_key_type" {
-  description = "The type of the range key (e.g., S or N)."
-  type        = string
-  default     = "S"
-}
-
-variable "ttl_attribute_name" {
-  description = "The attribute name used for TTL."
-  type        = string
-  default     = "TimeToExist"
-}
-
-variable "ttl_enabled" {
-  description = "Whether TTL is enabled for the table."
-  type        = bool
-  default     = true
-}
-
-variable "global_secondary_indexes" {
-  description = "List of global secondary indexes."
-  type = list(object({
-    name               = string
-    hash_key           = string
-    range_key          = string
-    projection_type    = string
-    non_key_attributes = list(string)
-  }))
-  default = []
-}
-
+# Create Replica option
 variable "create_replica" {
   description = "Whether to create a replica for the DynamoDB table."
   type        = bool
   default     = true
 }
 
-
+# Default tags
 variable "tags" {
   description = "A map of tags to assign to resources."
   type        = map(string)

@@ -1,6 +1,6 @@
-################## S3 Bucket ########################
+########################### S3 Bucket ###############################
 
-# create S3 bucket
+# Resource S3 bucket
 resource "aws_s3_bucket" "tf_challenge_bucket" {
   bucket = "tf-challenge-state-bucket"
 
@@ -12,7 +12,6 @@ resource "aws_s3_bucket" "tf_challenge_bucket" {
 
 
 # Enable Versioning
-
 resource "aws_s3_bucket_versioning" "tf_challege_version" {
   bucket = aws_s3_bucket.tf_challenge_bucket.id
   versioning_configuration {
@@ -20,6 +19,7 @@ resource "aws_s3_bucket_versioning" "tf_challege_version" {
   }
 }
 
+# Resource bucket ownership configuration
 resource "aws_s3_bucket_ownership_controls" "tf_ownership" {
   bucket = aws_s3_bucket.tf_challenge_bucket.id
   rule {
@@ -27,7 +27,7 @@ resource "aws_s3_bucket_ownership_controls" "tf_ownership" {
   }
 }
 
-
+# Enable S3 bucket resource access 
 resource "aws_s3_bucket_acl" "tf_challenge_acl" {
   depends_on = [aws_s3_bucket_ownership_controls.tf_ownership]
   bucket     = aws_s3_bucket.tf_challenge_bucket.id
@@ -47,11 +47,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "tf_challenge_encr
 }
 
 
-
-
-
-###################### DYNAMO DB ######################
-
+################################ DYNAMO DB ##########################################
 # Create DynamoDB
 resource "aws_dynamodb_table" "terraform_lock" {
   name         = "tf-challenge-state-lock"

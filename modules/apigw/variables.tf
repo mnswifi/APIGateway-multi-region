@@ -1,27 +1,24 @@
-
-variable "region" {
-  description = "The default region of deployment"
-  type        = string
-}
-
+# Cloudwatch log group arn
 variable "log_groups_arn" {
-  description = "Cloudwatcg log group arn"
+  description = "Cloudwatch log group arn"
   type        = string
 }
 
-
+# Apigateway method 
 variable "http_method" {
-  description = "The Apigateway method"
+  description = "Apigateway http method"
   type        = string
 }
 
+# API Gateway role arn
 variable "api_gateway_role_arn" {
-  description = "The role arn for apigateway"
+  description = "API Gateway role arn"
   type        = string
 }
 
+# input VPC id
 variable "vpc_id" {
-  description = "The vpc id"
+  description = "VPC id"
   type        = string
 }
 

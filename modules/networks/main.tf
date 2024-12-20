@@ -1,11 +1,8 @@
-data "aws_region" "current" {}
-
-
+############################# VPC, SECURITY GROUP, SUBNETS ###################################### 
 
 # Create VPC
 resource "aws_vpc" "tf_challenge_vpc" {
-  cidr_block = var.vpc_cidr_block
-
+  cidr_block           = var.vpc_cidr_block
   enable_dns_hostnames = true
   enable_dns_support   = true
 }
@@ -15,10 +12,10 @@ resource "aws_subnet" "tf_private_subnet" {
   cidr_block = cidrsubnet(var.vpc_cidr_block, 8, 0)
 }
 
-
+# Create Security Group
 resource "aws_security_group" "tf_sg" {
-  name        = "Allow http traffic"
-  description = "Allow http inbound traffic and all outbound traffic"
+  name        = "Allow http/https traffic"
+  description = "Allow http/https inbound traffic and all outbound traffic"
   vpc_id      = aws_vpc.tf_challenge_vpc.id
 
   tags = {
@@ -26,6 +23,7 @@ resource "aws_security_group" "tf_sg" {
   }
 }
 
+# Create HTTP rules
 resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv4" {
   security_group_id = aws_security_group.tf_sg.id
   cidr_ipv4         = aws_vpc.tf_challenge_vpc.cidr_block
@@ -34,6 +32,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv4" {
   to_port           = var.port_http
 }
 
+# Create HTTPS rules
 resource "aws_vpc_security_group_ingress_rule" "allow_https_ipv4" {
   security_group_id = aws_security_group.tf_sg.id
   cidr_ipv4         = aws_vpc.tf_challenge_vpc.cidr_block
@@ -43,7 +42,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_https_ipv4" {
 }
 
 
-
+# Allow all outbound traffic
 resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
   security_group_id = aws_security_group.tf_sg.id
   cidr_ipv4         = "0.0.0.0/0"

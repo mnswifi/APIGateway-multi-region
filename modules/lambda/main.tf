@@ -1,13 +1,8 @@
-
-# provider "aws" {
-#   region = "us-east-1" # Replace with your desired region
-# }
-
+######################## LAMBDA FUNCTION FOR CURL TEST ######################################
 
 # Lambda Function
 resource "aws_lambda_function" "curl_test_lambda" {
-  # depends_on = [ data.archive_file.lambda_payload ]
-  function_name = "CurlToApiGateway"
+  function_name = "CurlToApiGateway-${var.region}"
   role          = var.lambda_curl_arn
   handler       = "lambda_curl.lambda_handler"
   runtime       = "python3.12"
@@ -25,18 +20,10 @@ resource "aws_lambda_function" "curl_test_lambda" {
   # Environment Variables (Optional)
   environment {
     variables = {
-      API_GATEWAY_URL = "${var.apigw_invoke_curl}/${var.apigw_path_part}" //"https://your-api-gateway-url.amazonaws.com/accounts?accountId=123456789" 
+      API_GATEWAY_URL = "${var.apigw_invoke_curl}/${var.apigw_path_part}"
     }
   }
 
   memory_size = 128
   timeout     = 10
 }
-
-# Archive Lambda Function Code
-# data "archive_file" "lambda_payload" {
-#   type        = "zip"
-#   source_dir  = "${path.module}/lambda_code"
-#   output_path = "${path.module}/lambda_payload.zip"
-# }
-

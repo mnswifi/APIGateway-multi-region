@@ -1,6 +1,4 @@
-data "aws_caller_identity" "current" {}
-data "aws_region" "current" {}
-
+#################################### IAM ROLES AND POLICIES #################################
 # IAM Role for API Gateway to access DynamoDB
 resource "aws_iam_role" "api_gateway_role" {
   name               = "api-gateway-role"
@@ -21,8 +19,7 @@ resource "aws_iam_role" "api_gateway_role" {
 }
 
 
-
-
+# Dnamodb policy for API Gateway
 resource "aws_iam_policy" "dynamodb_policy" {
   name   = "dynamodb-access-policy"
   policy = <<EOF
@@ -40,38 +37,7 @@ resource "aws_iam_policy" "dynamodb_policy" {
 }
 
 
-
-# resource "aws_iam_policy" "cloudwatch_logs_policy" {
-#   name        = "CloudWatchLogsPolicy"
-#   description = "Policy to allow API Gateway to write logs to CloudWatch"
-#   policy      = jsonencode({
-#     Version = "2012-10-17",
-#     Statement = [
-#       {
-#         Effect   = "Allow",
-#         Action   = [
-#           "logs:CreateLogGroup",
-#           "logs:CreateLogStream",
-#           "logs:PutLogEvents"
-#         ],
-#         Resource = values(var.log_group_arns),
-#         Condition = {
-#           ArnEquals = {
-#             "aws:SourceArn": values(var.apigw_arns)
-#           }
-#         }
-#       }
-#     ]
-#   })
-# }
-
-
-
-
-
-
-
-
+# Cloud watch log resource policy for API Gateway role
 resource "aws_cloudwatch_log_resource_policy" "tf_log_policy" {
   policy_name = "tf_resource_policy"
   policy_document = jsonencode(
@@ -104,10 +70,6 @@ resource "aws_cloudwatch_log_resource_policy" "tf_log_policy" {
   )
 }
 
-
-
-
-############################## LAMBDA IAM ############################################
 
 # IAM Role for Lambda Execution
 resource "aws_iam_role" "lambda_execution_role" {
@@ -155,24 +117,13 @@ resource "aws_iam_role_policy" "lambda_policy" {
 
 
 
-
+# Dynamodb policy attachment for API Gateway role
 resource "aws_iam_role_policy_attachment" "attach_dynamodb_policy" {
   role       = aws_iam_role.api_gateway_role.name
   policy_arn = aws_iam_policy.dynamodb_policy.arn
 }
 
-
-# resource "aws_iam_role_policy_attachment" "attach_logs_policy" {
-#   role       = aws_iam_role.api_gateway_role.name
-#   policy_arn = aws_iam_policy.cloudwatch_logs_policy.arn
-# }
-
-# resource "aws_iam_role_policy_attachmnet" "lambda_role_policy" {
-#   role = aws_iam_role.lambda_execution_role.id
-#   policy_arn = aws_iam_policy.
-
-# }
-
+# CloudWatch log policy for API Gateway role
 resource "aws_iam_role_policy_attachment" "api_gateway_role_policy" {
   role       = aws_iam_role.api_gateway_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
